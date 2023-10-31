@@ -1,9 +1,17 @@
 use anyhow::Result;
+use embedded_svc::http::Method;
 use esp_idf_hal::prelude::Peripherals;
-use esp_idf_svc::eventloop::EspSystemEventLoop;
+use esp_idf_svc::{
+    eventloop::EspSystemEventLoop,
+    http::server::{Configuration, EspHttpServer},
+};
+use log::info;
+use routes::{handle_index, handle_set_color};
 use std::{thread::sleep, time::Duration};
 use wifi::connect_to_wifi;
 
+mod routes;
+mod template;
 mod wifi;
 
 #[toml_cfg::toml_config]
@@ -29,6 +37,13 @@ fn main() -> Result<()> {
         peripherals.modem,
         sysloop,
     )?;
+
+    let server_conf = Configuration::default();
+    let mut server = EspHttpServer::new(&server_conf)?;
+    server.fn_handler("/", Method::Get, handle_index)?;
+    server.fn_handler("/set-color", Method::Get, handle_set_color)?;
+
+    info!("Server awaiting connection");
 
     loop {
         sleep(Duration::from_millis(1000))
