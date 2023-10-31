@@ -1,0 +1,3 @@
+[server-firmware]
+wifi_ssid = "Test SSID"
+wifi_psk = "Test PSK"
