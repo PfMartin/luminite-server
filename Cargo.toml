@@ -1,5 +1,5 @@
 [package]
-name = "server-firmware"
+name = "luminite-server"
 version = "0.1.0"
 authors = ["PfMartin <martinpfatrisch@gmail.com>"]
 edition = "2021"
