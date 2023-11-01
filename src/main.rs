@@ -10,6 +10,9 @@ use server::routes::{handle_index, handle_set_color};
 use std::{thread::sleep, time::Duration};
 use wifi::connect_to_wifi;
 
+use crate::led_strip::set_led_color;
+
+mod led_strip;
 mod server;
 mod wifi;
 
@@ -24,6 +27,8 @@ pub struct Config {
 fn main() -> Result<()> {
     esp_idf_svc::sys::link_patches();
     esp_idf_svc::log::EspLogger::initialize_default();
+
+    let _ = set_led_color(5, 0, 0)?;
 
     let app_config = CONFIG;
 
@@ -42,6 +47,7 @@ fn main() -> Result<()> {
     server.fn_handler("/", Method::Get, handle_index)?;
     server.fn_handler("/set-color", Method::Get, handle_set_color)?;
 
+    let _ = set_led_color(0, 5, 0)?;
     info!("Server awaiting connection");
 
     loop {
