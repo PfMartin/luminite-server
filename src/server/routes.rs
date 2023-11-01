@@ -1,4 +1,4 @@
-use crate::template::templated;
+use crate::server::template::templated;
 use anyhow::Result;
 use embedded_svc::http::server::{HandlerError, Request};
 use esp_idf_svc::http::server::EspHttpConnection;

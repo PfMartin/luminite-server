@@ -6,12 +6,11 @@ use esp_idf_svc::{
     http::server::{Configuration, EspHttpServer},
 };
 use log::info;
-use routes::{handle_index, handle_set_color};
+use server::routes::{handle_index, handle_set_color};
 use std::{thread::sleep, time::Duration};
 use wifi::connect_to_wifi;
 
-mod routes;
-mod template;
+mod server;
 mod wifi;
 
 #[toml_cfg::toml_config]
