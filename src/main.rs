@@ -22,15 +22,17 @@ pub struct Config {
     wifi_ssid: &'static str,
     #[default("")]
     wifi_psk: &'static str,
+    #[default(8)]
+    indicator_led_gpio: u32,
 }
 
 fn main() -> Result<()> {
     esp_idf_svc::sys::link_patches();
     esp_idf_svc::log::EspLogger::initialize_default();
 
-    let _ = set_led_color(5, 0, 0)?;
-
     let app_config = CONFIG;
+
+    let _ = set_led_color(5, 0, 0, 0, app_config.indicator_led_gpio)?;
 
     let peripherals = Peripherals::take()?;
     let sysloop = EspSystemEventLoop::take()?;
@@ -47,7 +49,7 @@ fn main() -> Result<()> {
     server.fn_handler("/", Method::Get, handle_index)?;
     server.fn_handler("/set-color", Method::Get, handle_set_color)?;
 
-    let _ = set_led_color(0, 5, 0)?;
+    let _ = set_led_color(0, 5, 0, 0, app_config.indicator_led_gpio)?;
     info!("Server awaiting connection");
 
     loop {
