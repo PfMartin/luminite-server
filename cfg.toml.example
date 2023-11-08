@@ -1,3 +1,5 @@
 [luminite-server]
 wifi_ssid = "Test SSID"
 wifi_psk = "Test PSK"
+led_strip_gpio = 6
+indicator_led_gpio = 8

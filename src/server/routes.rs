@@ -1,17 +1,18 @@
 use crate::led_strip::set_led_color;
 use crate::server::template::templated;
+use crate::CONFIG;
 use anyhow::Result;
 use embedded_svc::http::server::{HandlerError, Request};
 use esp_idf_svc::http::server::EspHttpConnection;
 use log::error;
 use url::Url;
 
-const LED_STRIP_GPIO: u32 = 6;
-
 pub fn handle_index(req: Request<&mut EspHttpConnection<'_>>) -> Result<(), HandlerError> {
+    let app_config = CONFIG;
+
     let mut res = req.into_ok_response()?;
 
-    let _ = set_led_color(50, 255, 0, 1, LED_STRIP_GPIO);
+    let _ = set_led_color(255, 150, 50, 1, app_config.led_strip_gpio)?;
 
     res.write(templated("Hello from luminite!").as_bytes())?;
 
@@ -19,9 +20,17 @@ pub fn handle_index(req: Request<&mut EspHttpConnection<'_>>) -> Result<(), Hand
 }
 
 pub fn handle_set_color(req: Request<&mut EspHttpConnection<'_>>) -> Result<(), HandlerError> {
+    let app_config = CONFIG;
+
     let params = parse_query_params(req.uri())?;
 
-    let _ = set_led_color(params[0], params[1], params[2], 1, LED_STRIP_GPIO);
+    let _ = set_led_color(
+        params[0],
+        params[1],
+        params[2],
+        1,
+        app_config.led_strip_gpio,
+    )?;
 
     let mut res = req.into_ok_response()?;
 
