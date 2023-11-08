@@ -22,6 +22,8 @@ pub struct Config {
     wifi_ssid: &'static str,
     #[default("")]
     wifi_psk: &'static str,
+    #[default(6)]
+    led_strip_gpio: u32,
     #[default(8)]
     indicator_led_gpio: u32,
 }
@@ -32,6 +34,7 @@ fn main() -> Result<()> {
 
     let app_config = CONFIG;
 
+    let _ = set_led_color(255, 150, 50, 1, app_config.led_strip_gpio)?;
     let _ = set_led_color(5, 0, 0, 0, app_config.indicator_led_gpio)?;
 
     let peripherals = Peripherals::take()?;
