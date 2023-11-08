@@ -5,7 +5,7 @@ pub fn templated(content: impl AsRef<str>) -> String {
 <html>
   <head>
     <meta charset="utf-8">
-    <title>es-rs web server</title>
+    <title>luminite-server</title>
   </head>
   <body>
     {}
