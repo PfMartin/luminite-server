@@ -6,10 +6,12 @@ use esp_idf_svc::http::server::EspHttpConnection;
 use log::error;
 use url::Url;
 
+const LED_STRIP_GPIO: u32 = 6;
+
 pub fn handle_index(req: Request<&mut EspHttpConnection<'_>>) -> Result<(), HandlerError> {
     let mut res = req.into_ok_response()?;
 
-    let _ = set_led_color(50, 255, 0);
+    let _ = set_led_color(50, 255, 0, 1, LED_STRIP_GPIO);
 
     res.write(templated("Hello from luminite!").as_bytes())?;
 
@@ -19,7 +21,7 @@ pub fn handle_index(req: Request<&mut EspHttpConnection<'_>>) -> Result<(), Hand
 pub fn handle_set_color(req: Request<&mut EspHttpConnection<'_>>) -> Result<(), HandlerError> {
     let params = parse_query_params(req.uri())?;
 
-    let _ = set_led_color(params[0], params[1], params[2]);
+    let _ = set_led_color(params[0], params[1], params[2], 1, LED_STRIP_GPIO);
 
     let mut res = req.into_ok_response()?;
 
